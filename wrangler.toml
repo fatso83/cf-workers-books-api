@@ -6,5 +6,5 @@ compatibility_date = "2024-11-01"
 # For production, create a real KV namespace and replace 'id' and 'preview_id'.
 [[kv_namespaces]]
 binding = "BOOKS"
-id = "00000000000000000000000000000000"
-preview_id = "11111111111111111111111111111111"
+id = "0bd0468da499497c92acf313aae55160" # replace with your own
+preview_id = "7e298cc12115470c841d0a3e47fea12d"
