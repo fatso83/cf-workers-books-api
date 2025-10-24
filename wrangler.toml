@@ -1,5 +1,5 @@
 name = "books-api"
-main = "src/worker.ts"
+main = "src/worker.js"
 compatibility_date = "2024-11-01"
 
 # KV namespace binding; when running locally (wrangler dev / miniflare) this is emulated without IDs.
