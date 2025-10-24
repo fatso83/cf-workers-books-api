@@ -1,6 +1,16 @@
-# Cloudflare Workers Books API (KV + Miniflare)
+# UFT-mini-clone 
 
-A tiny API that lists and adds books using **Cloudflare KV**. Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
+> Clone of LogicRoom's public "books API" used in the courses 
+> Ultra Fast Testing and Infinite Architecture (made by Pete Hearn)
+> build using Cloudflare Workers KV store + Miniflare for local dev
+
+A tiny API that lists and adds books using **Cloudflare KV**. 
+Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
+
+Vibe coded in minutes with ChatGPT to serve a purpose of toying with some
+old codesandbox.io sandboxes from the UFT course. Meant to work wit
+- https://github.com/fatso83/uft-module-6/blob/main/src/Books/Books.test.js
+
 
 ## Endpoints
 
