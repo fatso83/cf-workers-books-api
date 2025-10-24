@@ -15,16 +15,16 @@ All responses use `content-type: application/json`.
 - `GET /api/:email/reset` → delete all books for `:email` (and reset its sequence)
 
 ## Quickstart
-
+Replace `bun` with `npm` or `yarn`
 ```bash
-pnpm i    # or npm i / yarn
-pnpm dev  # local dev on http://127.0.0.1:8787
+bun i    # or npm i / yarn
+bun dev  # local dev on http://127.0.0.1:8787
 ```
 
 ## Test with Miniflare + Vitest
 
 ```bash
-pnpm test
+bun test
 ```
 
 ## Deploy

@@ -2,13 +2,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { Miniflare } from "miniflare";
 
-async function mfFetch(mf: Miniflare, path: string, init?: RequestInit) {
+async function mfFetch(mf, path, init) {
   const url = new URL(path, "http://localhost");
   return mf.dispatchFetch(url, init);
 }
 
 describe("Books API", () => {
-  let mf: Miniflare;
+  let mf;
 
   beforeEach(async () => {
     mf = new Miniflare({
@@ -16,7 +16,6 @@ describe("Books API", () => {
       scriptPath: "src/worker.ts",
       kvNamespaces: ["BOOKS"],
     });
-    // reset test email before each test
     await mf.dispatchFetch("http://localhost/api/pete%40logicroom.co/reset");
   });
 
@@ -47,13 +46,11 @@ describe("Books API", () => {
   });
 
   it("supports allbooks across users", async () => {
-    // Add book for pete
     await mfFetch(mf, "/api/pete%40logicroom.co/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "I, Robot", author: "Isaac Asimov" }),
     });
-    // Add book for jane
     await mfFetch(mf, "/api/jane%40example.com/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -63,7 +60,7 @@ describe("Books API", () => {
     const res = await mfFetch(mf, "/api/pete%40logicroom.co/allbooks");
     const data = await res.json();
     expect(data.success).toBe(true);
-    const names = data.result.map((b: any) => b.name).sort();
+    const names = data.result.map((b) => b.name).sort();
     expect(names).toEqual(["I, Robot", "The Hobbit"]);
   });
 
