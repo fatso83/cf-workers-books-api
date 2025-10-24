@@ -1,5 +1,5 @@
-// test/books.test.ts
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+
 import { Miniflare } from "miniflare";
 
 async function mfFetch(mf, path, init) {
@@ -13,7 +13,7 @@ describe("Books API", () => {
   beforeEach(async () => {
     mf = new Miniflare({
       modules: true,
-      scriptPath: "src/worker.ts",
+      scriptPath: "src/worker.js",
       kvNamespaces: ["BOOKS"],
     });
     await mf.dispatchFetch("http://localhost/api/pete%40logicroom.co/reset");
