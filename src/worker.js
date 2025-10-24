@@ -113,7 +113,7 @@ export default {
    */
   async fetch(request, env) {
     try {
-      const response = await handleRequest(request, env);
+      const response = await this.handleRequest(request, env);
       return withCors(response);
     } catch (err) {
       return withCors(
