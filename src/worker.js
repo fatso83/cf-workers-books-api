@@ -1,5 +1,3 @@
-// src/worker.ts
-
 /**
  * @typedef {Object} Book
  * @property {number} bookId
@@ -15,6 +13,37 @@
  * @property {T} result
  */
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
+  "Access-Control-Max-Age": "86400",
+};
+
+async function handleOptions(request) {
+  if (
+    request.headers.get("Origin") !== null &&
+    request.headers.get("Access-Control-Request-Method") !== null &&
+    request.headers.get("Access-Control-Request-Headers") !== null
+  ) {
+    // Handle CORS preflight requests.
+    return new Response(null, {
+      headers: {
+        ...corsHeaders,
+        "Access-Control-Allow-Headers": request.headers.get(
+          "Access-Control-Request-Headers",
+        ),
+      },
+    });
+  } else {
+    // Handle standard OPTIONS request.
+    return new Response(null, {
+      headers: {
+        Allow: "GET, HEAD, POST, OPTIONS",
+      },
+    });
+  }
+}
+
 const json = (data, init = {}) =>
   new Response(JSON.stringify(data, null, 2), {
     headers: { "content-type": "application/json; charset=utf-8" },
@@ -22,7 +51,8 @@ const json = (data, init = {}) =>
   });
 
 const notFound = (msg) => json({ success: false, error: msg }, { status: 404 });
-const badRequest = (msg) => json({ success: false, error: msg }, { status: 400 });
+const badRequest = (msg) =>
+  json({ success: false, error: msg }, { status: 400 });
 
 function makeKey(email, id) {
   return `book:${email}:${id}`;
@@ -46,7 +76,7 @@ async function listBooksByEmail(kv, email) {
   const results = [];
   for (const { name: key } of keys.keys) {
     const book = await kv.get(key, "json");
-    if (book) results.push(/** @type {Book} */(book));
+    if (book) results.push(/** @type {Book} */ (book));
   }
   results.sort((a, b) => a.bookId - b.bookId);
   return results;
@@ -58,7 +88,7 @@ async function listAllBooks(kv) {
   const results = [];
   for (const { name: key } of keys.keys) {
     const book = await kv.get(key, "json");
-    if (book) results.push(/** @type {Book} */(book));
+    if (book) results.push(/** @type {Book} */ (book));
   }
   results.sort((a, b) => a.bookId - b.bookId);
   return results;
@@ -93,6 +123,11 @@ export default {
     const tail = segments.slice(2).join("/");
 
     try {
+      if (method === "OPTIONS") {
+        // Handle CORS preflight requests
+        return handleOptions(request);
+      }
+
       if (method === "GET" && tail === "books") {
         const books = await listBooksByEmail(env.BOOKS, email);
         /** @type {ApiResponse<Book[]>} */
@@ -108,7 +143,9 @@ export default {
       }
 
       if (method === "POST" && tail === "books") {
-        const body = /** @type {Partial<Book> | null} */ (await request.json().catch(() => null));
+        const body = /** @type {Partial<Book> | null} */ (
+          await request.json().catch(() => null)
+        );
         if (!body || !body.name || !body.author) {
           return badRequest("Body must include 'name' and 'author'.");
         }
@@ -135,7 +172,10 @@ export default {
 
       return notFound("Route not found");
     } catch (err) {
-      const message = (err && typeof err === "object" && "message" in err) ? err.message : String(err);
+      const message =
+        err && typeof err === "object" && "message" in err
+          ? err.message
+          : String(err);
       return json({ success: false, error: message }, { status: 500 });
     }
   },

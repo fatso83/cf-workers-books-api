@@ -1,16 +1,16 @@
 # UFT mini-clone 
 
-> Clone of LogicRoom's public "books API" used in the courses 
+> Clone of LogicRoom's public "books API" used in the courses
 > Ultra Fast Testing and Infinite Architecture (made by Pete Hearn)
 > built using _Cloudflare Workers KV store_ + _Miniflare_ for local dev
 
-A tiny API that lists and adds books using **Cloudflare KV**. 
+A tiny API that lists and adds books using **Cloudflare KV**.
 Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
 
 Vibe coded in minutes with ChatGPT to serve a purpose of toying with some
 old codesandbox.io sandboxes from the UFT course. Meant to work wit
-- https://github.com/fatso83/uft-module-6/blob/main/src/Books/Books.test.js
 
+- https://github.com/fatso83/uft-module-6/blob/main/src/Books/Books.test.js
 
 ## Endpoints
 
@@ -25,7 +25,9 @@ All responses use `content-type: application/json`.
 - `GET /api/:email/reset` → delete all books for `:email` (and reset its sequence)
 
 ## Quickstart
+
 Replace `bun` with `npm` or `yarn`
+
 ```bash
 bun i    # or npm i / yarn
 bun dev  # local dev on http://127.0.0.1:8787

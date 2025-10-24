@@ -31,7 +31,10 @@ describe("Books API", () => {
     const add = await mfFetch(mf, "/api/pete%40logicroom.co/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name: "Wind in the willows", author: "Kenneth Graeme" }),
+      body: JSON.stringify({
+        name: "Wind in the willows",
+        author: "Kenneth Graeme",
+      }),
     });
     expect(add.status).toBe(201);
     const created = await add.json();
