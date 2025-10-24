@@ -1,0 +1,10 @@
+name = "books-api"
+main = "src/worker.ts"
+compatibility_date = "2024-11-01"
+
+# KV namespace binding; when running locally (wrangler dev / miniflare) this is emulated without IDs.
+# For production, create a real KV namespace and replace 'id' and 'preview_id'.
+[[kv_namespaces]]
+binding = "BOOKS"
+id = "00000000000000000000000000000000"
+preview_id = "11111111111111111111111111111111"
