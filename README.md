@@ -1,4 +1,4 @@
-# UFT-mini-clone 
+# UFT mini-clone 
 
 > Clone of LogicRoom's public "books API" used in the courses 
 > Ultra Fast Testing and Infinite Architecture (made by Pete Hearn)
