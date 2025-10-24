@@ -94,6 +94,17 @@ async function listAllBooks(kv) {
   return results;
 }
 
+function withCors(response) {
+  const newHeaders = new Headers(response.headers);
+  newHeaders.set("Access-Control-Allow-Origin", "*");
+  newHeaders.set("Access-Control-Allow-Methods", "GET,HEAD,POST,OPTIONS");
+  newHeaders.set("Access-Control-Max-Age", "86400");
+  return new Response(response.body, {
+    ...response,
+    headers: newHeaders,
+  });
+}
+
 export default {
   /**
    * @param {Request} request
@@ -101,6 +112,20 @@ export default {
    * @returns {Promise<Response>}
    */
   async fetch(request, env) {
+    try {
+      const response = await handleRequest(request, env);
+      return withCors(response);
+    } catch (err) {
+      return withCors(
+        new Response(JSON.stringify({ success: false, error: err.message }), {
+          status: 500,
+          headers: { "content-type": "application/json" },
+        }),
+      );
+    }
+  },
+
+  async handleRequest(request, env) {
     const url = new URL(request.url);
     const method = request.method.toUpperCase();
 
