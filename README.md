@@ -2,7 +2,7 @@
 
 > Clone of LogicRoom's public "books API" used in the courses 
 > Ultra Fast Testing and Infinite Architecture (made by Pete Hearn)
-> build using Cloudflare Workers KV store + Miniflare for local dev
+> built using _Cloudflare Workers KV store_ + _Miniflare_ for local dev
 
 A tiny API that lists and adds books using **Cloudflare KV**. 
 Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
