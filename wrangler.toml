@@ -12,4 +12,7 @@ class_name = "BookIndexDurableObject"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["BookDurableObject", "BookIndexDurableObject"]
+#new_classes = ["BookDurableObject", "BookIndexDurableObject"]
+# In order to use Durable Objects with a free plan, you must create
+# a namespace using a new_sqlite_classes migration. [code: 10097]
+new_sqlite_classes = ["BookDurableObject", "BookIndexDurableObject"]
