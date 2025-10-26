@@ -1,1 +1,4 @@
 .wrangler/
+bun.lock
+bun.lockb
+dist

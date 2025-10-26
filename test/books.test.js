@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from "vitest";
-
+// test/books.test.js
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { Miniflare } from "miniflare";
 
 async function mfFetch(mf, path, init) {
@@ -7,19 +7,27 @@ async function mfFetch(mf, path, init) {
   return mf.dispatchFetch(url, init);
 }
 
-describe("Books API", () => {
+describe("Books API with Durable Objects + Global Index", () => {
   let mf;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     mf = new Miniflare({
       modules: true,
-      scriptPath: "src/worker.js",
-      kvNamespaces: ["BOOKS"],
+      scriptPath: "dist/worker.js",
+      durableObjects: {
+        BOOKS: "BookDurableObject",
+        BOOK_INDEX: "BookIndexDurableObject",
+      },
     });
-    await mf.dispatchFetch("http://localhost/api/pete%40logicroom.co/reset");
+  });
+
+  afterAll(async () => {
+    await mf.dispose();
   });
 
   it("lists empty books for new email", async () => {
+    await mfFetch(mf, "/api/pete%40logicroom.co/reset");
+
     const res = await mfFetch(mf, "/api/pete%40logicroom.co/books");
     expect(res.status).toBe(200);
     const json = await res.json();
@@ -28,13 +36,12 @@ describe("Books API", () => {
   });
 
   it("adds a book and lists it", async () => {
+    await mfFetch(mf, "/api/pete%40logicroom.co/reset");
+
     const add = await mfFetch(mf, "/api/pete%40logicroom.co/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        name: "Wind in the willows",
-        author: "Kenneth Graeme",
-      }),
+      body: JSON.stringify({ name: "Wind in the willows", author: "Kenneth Graeme" }),
     });
     expect(add.status).toBe(201);
     const created = await add.json();
@@ -48,12 +55,16 @@ describe("Books API", () => {
     expect(payload.result[0].author).toBe("Kenneth Graeme");
   });
 
-  it("supports allbooks across users", async () => {
+  it("supports allbooks across users via global index", async () => {
+    await mfFetch(mf, "/api/pete%40logicroom.co/reset");
+    await mfFetch(mf, "/api/jane%40example.com/reset");
+
     await mfFetch(mf, "/api/pete%40logicroom.co/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "I, Robot", author: "Isaac Asimov" }),
     });
+
     await mfFetch(mf, "/api/jane%40example.com/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -67,7 +78,9 @@ describe("Books API", () => {
     expect(names).toEqual(["I, Robot", "The Hobbit"]);
   });
 
-  it("resets per email", async () => {
+  it("resets per email (including index)", async () => {
+    await mfFetch(mf, "/api/pete%40logicroom.co/reset");
+
     await mfFetch(mf, "/api/pete%40logicroom.co/books", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -83,5 +96,9 @@ describe("Books API", () => {
     const after = await mfFetch(mf, "/api/pete%40logicroom.co/books");
     const ajson = await after.json();
     expect(ajson.result.length).toBe(0);
+
+    const all = await mfFetch(mf, "/api/pete%40logicroom.co/allbooks");
+    const allJson = await all.json();
+    expect(allJson.result.find(b => b.ownerId === "pete@logicroom.co")).toBeUndefined();
   });
 });

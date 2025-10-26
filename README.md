@@ -2,9 +2,9 @@
 
 > Clone of LogicRoom's public "books API" used in the courses
 > Ultra Fast Testing and Infinite Architecture (made by Pete Hearn)
-> built using _Cloudflare Workers KV store_ + _Miniflare_ for local dev
+> built using _Cloudflare Workers Durable Objects + _Miniflare_ for local dev
 
-A tiny API that lists and adds books using **Cloudflare KV**.
+A tiny API that lists and adds books using **Cloudflare Durable Objects**.
 Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
 
 Vibe coded in minutes with ChatGPT to serve a purpose of toying with some
