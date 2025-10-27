@@ -7,10 +7,7 @@
 A tiny API that lists and adds books using **Cloudflare Durable Objects**.
 Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
 
-Vibe coded in minutes with ChatGPT to serve a purpose of toying with some
-old codesandbox.io sandboxes from the UFT course. Meant to work wit
-
-- https://github.com/fatso83/uft-module-6/blob/main/src/Books/Books.test.js
+Meant to work with [module 6 of Ultra Fast Testing](https://github.com/fatso83/uft-module-6)
 
 ## Endpoints
 
