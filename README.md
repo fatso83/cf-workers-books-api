@@ -36,21 +36,14 @@ bun dev  # local dev on http://127.0.0.1:8787
 ## Test with Miniflare + Vitest
 
 ```bash
-bun test
+bun run test
 ```
 
 ## Deploy
 
-1. Create a KV namespace and bind it to `BOOKS` in your Cloudflare account:
-   ```bash
-   wrangler kv:namespace create BOOKS
-   wrangler kv:namespace create BOOKS --preview
-   ```
-2. Put the generated IDs in `wrangler.toml` under the `[[kv_namespaces]]` entry.
-3. Deploy:
-   ```bash
-   pnpm deploy
-   ```
+```bash
+bun run deploy
+```
 
 ## cURL Examples
 
@@ -67,9 +60,3 @@ curl -s http://127.0.0.1:8787/api/pete%40logicroom.co/books
 # All books across users (hitting any email path works; email is ignored for this route)
 curl -s http://127.0.0.1:8787/api/pete%40logicroom.co/allbooks
 ```
-
-## Notes
-
-- Keys are stored as `book:<email>:<bookId>`. A simple per-email sequence is kept at `seq:<email>`.
-- KV has eventual consistency; IDs use a monotonic-ish sequence blending `Date.now()`.
-- `allbooks` enumerates all `book:` keys in the bound KV namespace.
