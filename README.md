@@ -7,6 +7,9 @@
 A tiny API that lists and adds books using **Cloudflare Durable Objects**.
 Runs locally with **Miniflare** from the latest Workers SDK and deploys with **Wrangler**.
 
+Deployed at https://books-api.carlerik.workers.dev. Example routes:
+- https://books-api.carlerik.workers.dev/api/foo@bar/books
+
 Meant to work with [module 6 of Ultra Fast Testing](https://github.com/fatso83/uft-module-6)
 
 ## Endpoints
